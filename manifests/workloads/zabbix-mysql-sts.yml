@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: zabbix-mysql-sts
+  namespace: zabbix
+  labels:
+    app: zabbix-mysql
+spec:
+  selector:
+    matchLabels:
+      app: zabbix-mysql
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: zabbix-mysql
+    spec:
+      containers:
+      - name: mysql-server
+        image: mysql:8.0-oracle
+        args:
+        - mysqld
+        - --character-set-server=utf8mb4
+        - --collation-server=utf8mb4_bin
+        - --default-authentication-plugin=mysql_native_password
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: db-data
+          mountPath: /var/lib/mysql
+        env:
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: zabbix-db-creds
+              key: zabbix-db-user
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: zabbix-db-creds
+              key: zabbix-db-pass
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: zabbix-db-settings
+              key: db-name
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: zabbix-db-creds
+              key: zabbix-db-root-pass
+  volumeClaimTemplates:
+  - metadata:
+      name: db-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: local-storage
+      resources:
+        requests:
+          storage: 1Gi

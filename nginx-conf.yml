@@ -20,15 +20,14 @@
         owner: root
         group: root
 
-    - name: "symlink available-sites to enabled-sites"
+    - name: "symlink sites-available to sites-enabled"
       become: true
       ansible.builtin.file:
         state: link
-        src: "{{ item }}"
+        src: /etc/nginx/sites-available/{{ item | basename }}
         path: /etc/nginx/sites-enabled/{{ item | basename }}
-        remote: true
       with_fileglob:
-        - /etc/nginx/sites-available/*.conf
+        - nginx/sites-available/*.conf
       
     - name: "starting nginx"
       become: true

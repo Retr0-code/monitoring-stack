@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: zabbix-db-creds
+  namespace: zabbix
+data:
+  zabbix-db-user: "emFiYml4"
+  zabbix-db-pass: "emFiYml4"
+  zabbix-db-root-pass: "ekBiYjF4X3IwMHQ="
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zabbix-db-settings
+  namespace: zabbix
+data:
+  db-name: zabbix
+  db-host: zabbix-mysql
+  db-port: "3306"
