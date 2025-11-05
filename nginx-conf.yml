@@ -1,0 +1,44 @@
+- hosts: all
+  tasks:
+    - name: "copy new configuration files"
+      become: true
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: /etc/nginx
+        backup: true
+        force: true
+      loop:
+        - nginx/http.d
+        - nginx/sites-available
+
+    - name: "create sites-enabled"
+      become: true
+      ansible.builtin.file:
+        path: /etc/nginx/sites-enabled
+        state: directory
+        mode: '0755'
+        owner: root
+        group: root
+
+    - name: "symlink available-sites to enabled-sites"
+      become: true
+      ansible.builtin.file:
+        state: link
+        src: "{{ item }}"
+        path: /etc/nginx/sites-enabled/{{ item | basename }}
+        remote: true
+      with_fileglob:
+        - /etc/nginx/sites-available/*.conf
+      
+    - name: "starting nginx"
+      become: true
+      service:
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: "reloading nginx"
+      become: true
+      service:
+        name: nginx
+        state: reloaded
