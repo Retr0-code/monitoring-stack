@@ -21,3 +21,26 @@ spec:
               operator: In
               values:
                - minikube
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: zabbix-mysql-initdb-pv
+  namespace: zabbix
+spec:
+  capacity:
+    storage: 10Mi
+  accessModes:
+    - ReadOnlyMany
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: manual
+  hostPath:
+    path: /mnt/initdb/server.sql.gz
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+               - minikube
