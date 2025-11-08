@@ -1,3 +1,2 @@
 resources:
-  - prometheus-pv.yml
   - zabbix-mysql-pv.yml

@@ -1,5 +1,4 @@
 resources:
-  - prometheus-sts.yml
   - zabbix-mysql-sts.yml
   - zabbix-server-dep.yml
   - zabbix-web-dep.yml

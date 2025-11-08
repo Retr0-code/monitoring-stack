@@ -1,6 +1,3 @@
 resources:
-  - ./namespaces
-  - ./configmaps
-  - ./volumes
-  - ./services
-  - ./workloads
+  - zabbix
+  - prometheus

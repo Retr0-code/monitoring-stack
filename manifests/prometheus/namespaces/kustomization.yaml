@@ -1,3 +1,2 @@
 resources:
   - prometheus-ns.yml
-  - zabbix-ns.yml
