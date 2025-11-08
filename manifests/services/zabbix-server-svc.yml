@@ -6,11 +6,15 @@ metadata:
   labels:
     app: zabbix-server
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
   - port: 10051
     targetPort: 10051
     protocol: TCP
-    nodePort: 31051
+    name: zabbix-trapper
+  - port: 10050
+    targetPort: 10050
+    protocol: TCP
+    name: zabbix-agent
   selector:
     app: zabbix-server
