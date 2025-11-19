@@ -26,6 +26,16 @@ spec:
         volumeMounts:
           - name: prom-db
             mountPath: /prometheus
+          - name: config
+            mountPath: /etc/prometheus
+            readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          name: prometheus-cfg
+          items:
+          - key: "prometheus.yml"
+            path: "prometheus.yml"
   volumeClaimTemplates:
   - metadata:
       name: prom-db
