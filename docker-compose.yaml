@@ -1,0 +1,12 @@
+services:
+  grafana:
+    image: grafana/grafana:12.4.0-19362345403
+    user: '0'
+    network_mode: host
+    ports:
+      - 3000:3000
+    volumes:
+      - ./grafana-data:/var/lib/grafana:rw
+
+volumes:
+  grafana-data: {}
